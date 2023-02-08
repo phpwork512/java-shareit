@@ -22,14 +22,14 @@ public class ItemDtoMapper {
      */
     public static Item toItem(ItemDto itemDto) {
         if (itemDto != null)
-            return new Item(itemDto.getId()
-                    , 0L
-                    , itemDto.getName()
-                    , itemDto.getDescription()
-                    , itemDto.getAvailable()
-                    , null
-                    , null
-                    , null);
+            return new Item(itemDto.getId(),
+                    0L,
+                    itemDto.getName(),
+                    itemDto.getDescription(),
+                    itemDto.getAvailable(),
+                    null,
+                    null,
+                    null);
         else return null;
     }
 
@@ -41,13 +41,13 @@ public class ItemDtoMapper {
      */
     public static ItemDto toItemDto(Item item) {
         if (item != null)
-            return new ItemDto(item.getId()
-                    , item.getName()
-                    , item.getDescription()
-                    , item.getAvailable()
-                    , BookingDtoMapper.toBookingShortDto(item.getLastBooking())
-                    , BookingDtoMapper.toBookingShortDto(item.getNextBooking())
-                    , CommentDtoMapper.toCommentDtoList(item.getComments()));
+            return new ItemDto(item.getId(),
+                    item.getName(),
+                    item.getDescription(),
+                    item.getAvailable(),
+                    BookingDtoMapper.toBookingShortDto(item.getLastBooking()),
+                    BookingDtoMapper.toBookingShortDto(item.getNextBooking()),
+                    CommentDtoMapper.toCommentDtoList(item.getComments()));
         else return null;
     }
 

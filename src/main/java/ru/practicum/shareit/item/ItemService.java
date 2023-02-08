@@ -201,31 +201,31 @@ public class ItemService {
     /**
      * метод сохраняет новый отзыв к вещи
      * @param text текст отзыва
-     * @param item_id id вещи
-     * @param author_id id пользователя
+     * @param itemId id вещи
+     * @param authorId id пользователя
      * @return объект типа Comment
      * @throws CommentAuthorHaveNoBookingsException если у пользователя нет завершенных бронирований этой вещи (не может оставлять отзыв)
      */
-    public Comment createComment(String text, long item_id, long author_id) throws CommentAuthorHaveNoBookingsException {
-        Item item = getById(item_id);
-        User author = userService.getById(author_id);
+    public Comment createComment(String text, long itemId, long authorId) throws CommentAuthorHaveNoBookingsException {
+        Item item = getById(itemId);
+        User author = userService.getById(authorId);
 
-        if (authorHaveBookingsOfItem(item_id, author_id)) {
+        if (authorHaveBookingsOfItem(itemId, authorId)) {
             Comment comment = new Comment(0, text, item, author, LocalDateTime.now());
             return commentRepository.save(comment);
         } else {
-            throw new CommentAuthorHaveNoBookingsException("Пользователь " + author_id + " не имеет завершенных бронирований вещи " + item_id);
+            throw new CommentAuthorHaveNoBookingsException("Пользователь " + authorId + " не имеет завершенных бронирований вещи " + itemId);
         }
     }
 
     /**
      * метод для поиска одобренных завершенных бронирований вещи
-     * @param item_id id вещи
-     * @param author_id id пользователя
+     * @param itemId id вещи
+     * @param authorId id пользователя
      * @return true если бронирования были, false если бронирований не было
      */
-    private boolean authorHaveBookingsOfItem(long item_id, long author_id) {
-        List<Booking> bookings = bookingRepository.findByItem_idAndBooker_idAndStatusAndRentEndDateIsBefore(item_id, author_id, APPROVED, LocalDateTime.now());
+    private boolean authorHaveBookingsOfItem(long itemId, long authorId) {
+        List<Booking> bookings = bookingRepository.findByItem_idAndBooker_idAndStatusAndRentEndDateIsBefore(itemId, authorId, APPROVED, LocalDateTime.now());
         return !bookings.isEmpty();
     }
 }

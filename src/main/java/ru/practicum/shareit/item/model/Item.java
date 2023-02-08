@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name="items")
+@Table(name = "items")
 public class Item {
 
     /**
@@ -26,13 +26,13 @@ public class Item {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="item_id", nullable = false)
+    @Column(name = "item_id", nullable = false)
     private long id;
 
     /**
      * id пользователя-владельца
      */
-    @Column(name="owner_id", nullable = false)
+    @Column(name = "owner_id", nullable = false)
     private long ownerId;
 
     /**

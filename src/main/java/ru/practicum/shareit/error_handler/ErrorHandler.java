@@ -13,11 +13,11 @@ import javax.validation.ValidationException;
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler({ValidationException.class
-            , InvalidItemOwnerException.class
-            , BookingItemUnavailableExceprion.class
-            , BookingAlreadyApprovedException.class
-            , CommentAuthorHaveNoBookingsException.class})
+    @ExceptionHandler({ValidationException.class,
+            InvalidItemOwnerException.class,
+            BookingItemUnavailableExceprion.class,
+            BookingAlreadyApprovedException.class,
+            CommentAuthorHaveNoBookingsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final RuntimeException e) {
         log.info(e.getMessage());

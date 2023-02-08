@@ -13,12 +13,12 @@ public class BookingDtoMapper {
 
     public static BookingDto toBookingDto(Booking booking) {
         if (booking != null) {
-            return new BookingDto(booking.getId()
-                    , ItemDtoMapper.toItemDto(booking.getItem())
-                    , UserDtoMapper.toUserDto(booking.getBooker())
-                    , booking.getRentStartDate()
-                    , booking.getRentEndDate()
-                    , booking.getStatus());
+            return new BookingDto(booking.getId(),
+                    ItemDtoMapper.toItemDto(booking.getItem()),
+                    UserDtoMapper.toUserDto(booking.getBooker()),
+                    booking.getRentStartDate(),
+                    booking.getRentEndDate(),
+                    booking.getStatus());
         } else return null;
     }
 

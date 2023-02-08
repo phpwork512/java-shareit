@@ -11,7 +11,7 @@ public class UserDto {
     /**
      * id пользователя в системе, уникальное
      */
-    private int id;
+    private long id;
 
     /**
      * имя пользователя

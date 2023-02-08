@@ -4,23 +4,23 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentDtoMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
+
     private final String xHeaderName = "X-Sharer-User-Id";
 
     /**
@@ -91,9 +91,9 @@ public class ItemController {
      */
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto get(@PathVariable int itemId) {
+    public ItemDto get(@PathVariable int itemId, @RequestHeader(value = xHeaderName, defaultValue = "0") int ownerId) {
         log.info("Get itemId {}", itemId);
-        return ItemDtoMapper.toItemDto(itemService.getById(itemId));
+        return ItemDtoMapper.toItemDto(itemService.getById(itemId, ownerId));
     }
 
     /**
@@ -131,49 +131,23 @@ public class ItemController {
     }
 
     /**
-     * утилитарный класс для преобразования Item <--> ItemDto
+     * оставить отзыв к вещи если ранее её бронировал
+     *
+     * @param commentDto данные отзыва
+     * @param itemId     id вещи
+     * @param authorId   id автора
+     * @return объект CommentDto
+     * @throws ValidationException если передан ошибочный параметр authorId
      */
-    private static class ItemDtoMapper {
-        /**
-         * преобразовать ItemDto в Item
-         *
-         * @param itemDto объект ItemDto
-         * @return объект Item или если itemDto был null, то возвращает тоже null
-         */
-        public static Item toItem(ItemDto itemDto) {
-            if (itemDto != null)
-                return new Item(itemDto.getId(), 0, itemDto.getName(), itemDto.getDescription(), itemDto.getAvailable());
-            else return null;
+    @PostMapping("/{itemId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public CommentDto createComment(@Valid @RequestBody CommentDto commentDto, @PathVariable int itemId, @RequestHeader(value = xHeaderName, defaultValue = "0") int authorId)
+            throws ValidationException {
+        log.info("Create comment for item {}, author {}: " + commentDto.toString(), itemId, authorId);
+        if (authorId <= 0) {
+            throw new ValidationException("Указан ошибочный id автора комментария");
         }
 
-        /**
-         * преобразовать Item в ItemDto
-         *
-         * @param item объект Item
-         * @return объект ItemDto или если item был null, то возвращает тоже null
-         */
-        public static ItemDto toItemDto(Item item) {
-            if (item != null)
-                return new ItemDto(item.getId(), item.getName(), item.getDescription(), item.getAvailable());
-            else return null;
-        }
-
-        /**
-         * преобразовать список Item в список ItemDto
-         *
-         * @param itemList список объектов Item
-         * @return список объектов ItemDto
-         */
-        public static List<ItemDto> toItemDtoList(List<Item> itemList) {
-            List<ItemDto> itemDtoList = new ArrayList<>();
-
-            if (itemList != null) {
-                for (Item item : itemList) {
-                    itemDtoList.add(toItemDto(item));
-                }
-            }
-
-            return itemDtoList;
-        }
+        return CommentDtoMapper.toCommentDto(itemService.createComment(commentDto.getText(), itemId, authorId));
     }
 }

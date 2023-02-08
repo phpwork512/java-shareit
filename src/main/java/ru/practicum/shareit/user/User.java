@@ -37,6 +37,6 @@ public class User {
      */
     @Email(message = "Электронная почта указана неверно")
     @NotBlank(message = "Электронная почта не может быть пустой")
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 }

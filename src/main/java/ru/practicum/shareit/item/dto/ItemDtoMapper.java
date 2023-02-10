@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingDtoMapper;
 import ru.practicum.shareit.item.model.Item;
 
@@ -9,11 +11,8 @@ import java.util.List;
 /**
  * утилитарный класс для преобразования Item <--> ItemDto
  */
-public class ItemDtoMapper {
-
-    private ItemDtoMapper() {
-    }
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ItemDtoMapper {
     /**
      * преобразовать ItemDto в Item
      *
@@ -21,16 +20,16 @@ public class ItemDtoMapper {
      * @return объект Item или если itemDto был null, то возвращает тоже null
      */
     public static Item toItem(ItemDto itemDto) {
-        if (itemDto != null)
-            return new Item(itemDto.getId(),
-                    0L,
-                    itemDto.getName(),
-                    itemDto.getDescription(),
-                    itemDto.getAvailable(),
-                    null,
-                    null,
-                    null);
-        else return null;
+        if (itemDto != null) {
+            return Item.builder().
+                    id(itemDto.getId()).
+                    ownerId(0L).
+                    name(itemDto.getName()).
+                    description(itemDto.getDescription()).
+                    available(itemDto.getAvailable()).build();
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -40,15 +39,18 @@ public class ItemDtoMapper {
      * @return объект ItemDto или если item был null, то возвращает тоже null
      */
     public static ItemDto toItemDto(Item item) {
-        if (item != null)
-            return new ItemDto(item.getId(),
-                    item.getName(),
-                    item.getDescription(),
-                    item.getAvailable(),
-                    BookingDtoMapper.toBookingShortDto(item.getLastBooking()),
-                    BookingDtoMapper.toBookingShortDto(item.getNextBooking()),
-                    CommentDtoMapper.toCommentDtoList(item.getComments()));
-        else return null;
+        if (item != null) {
+            return ItemDto.builder().
+                    id(item.getId()).
+                    name(item.getName()).
+                    description(item.getDescription()).
+                    available(item.getAvailable()).
+                    lastBooking(BookingDtoMapper.toBookingShortDto(item.getLastBooking())).
+                    nextBooking(BookingDtoMapper.toBookingShortDto(item.getNextBooking())).
+                    comments(CommentDtoMapper.toCommentDtoList(item.getComments())).build();
+        } else {
+            return null;
+        }
     }
 
     /**

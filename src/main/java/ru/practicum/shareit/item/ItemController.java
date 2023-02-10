@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    private final String xHeaderName = "X-Sharer-User-Id";
+    private final static String X_HEADER_NAME = "X-Sharer-User-Id";
 
     /**
      * сохранить новую вещь в хранилище, присвоить уникальный id
@@ -33,7 +33,7 @@ public class ItemController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto create(@Valid @RequestBody Item item, @RequestHeader(value = xHeaderName, defaultValue = "0") int ownerId)
+    public ItemDto create(@Valid @RequestBody Item item, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
         log.info("Create item, owner {}: " + item.toString(), ownerId);
         if (ownerId <= 0) {
@@ -53,7 +53,7 @@ public class ItemController {
      */
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto update(@PathVariable int itemId, @Valid @RequestBody ItemDto itemDto, @RequestHeader(value = xHeaderName, defaultValue = "0") int ownerId)
+    public ItemDto update(@PathVariable int itemId, @Valid @RequestBody ItemDto itemDto, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
         log.info("Update item {}, ownerId {}: " + itemDto, itemId, ownerId);
         if (ownerId <= 0) {
@@ -74,7 +74,7 @@ public class ItemController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getOwnedItemsList(@RequestHeader(value = xHeaderName, defaultValue = "0") int ownerId) {
+    public List<ItemDto> getOwnedItemsList(@RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get owned items list, ownerId {}", ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
@@ -91,7 +91,7 @@ public class ItemController {
      */
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto get(@PathVariable int itemId, @RequestHeader(value = xHeaderName, defaultValue = "0") int ownerId) {
+    public ItemDto get(@PathVariable int itemId, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get itemId {}", itemId);
         return ItemDtoMapper.toItemDto(itemService.getById(itemId, ownerId));
     }
@@ -121,7 +121,7 @@ public class ItemController {
      */
     @DeleteMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable int itemId, @RequestHeader(value = xHeaderName, defaultValue = "0") int ownerId) {
+    public void delete(@PathVariable int itemId, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Delete itemId {}, ownerId {}", itemId, ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
@@ -141,7 +141,7 @@ public class ItemController {
      */
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto createComment(@Valid @RequestBody CommentDto commentDto, @PathVariable int itemId, @RequestHeader(value = xHeaderName, defaultValue = "0") int authorId)
+    public CommentDto createComment(@Valid @RequestBody CommentDto commentDto, @PathVariable int itemId, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int authorId)
             throws ValidationException {
         log.info("Create comment for item {}, author {}: " + commentDto.toString(), itemId, authorId);
         if (authorId <= 0) {

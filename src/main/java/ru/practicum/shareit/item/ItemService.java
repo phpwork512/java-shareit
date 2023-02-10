@@ -112,14 +112,14 @@ public class ItemService {
                 Booking lastBooking = item.getLastBooking();
                 if (booking.getRentEndDate().isBefore(nowDateTime)
                         && (lastBooking == null
-                        || lastBooking.getRentEndDate().isBefore(booking.getRentEndDate()))) {
+                            || lastBooking.getRentEndDate().isBefore(booking.getRentEndDate()))) {
                     item.setLastBooking(booking);
                 }
 
                 Booking nextBooking = item.getNextBooking();
                 if (booking.getRentStartDate().isAfter(nowDateTime)
                         && (nextBooking == null
-                        || nextBooking.getRentStartDate().isAfter(booking.getRentStartDate()))) {
+                            || nextBooking.getRentStartDate().isAfter(booking.getRentStartDate()))) {
                     item.setNextBooking(booking);
                 }
             }

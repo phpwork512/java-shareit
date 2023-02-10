@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.item.dto.ItemDtoMapper;
 import ru.practicum.shareit.user.dto.UserDtoMapper;
@@ -7,18 +9,17 @@ import ru.practicum.shareit.user.dto.UserDtoMapper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookingDtoMapper {
-    private BookingDtoMapper() {
-    }
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class BookingDtoMapper {
     public static BookingDto toBookingDto(Booking booking) {
         if (booking != null) {
-            return new BookingDto(booking.getId(),
-                    ItemDtoMapper.toItemDto(booking.getItem()),
-                    UserDtoMapper.toUserDto(booking.getBooker()),
-                    booking.getRentStartDate(),
-                    booking.getRentEndDate(),
-                    booking.getStatus());
+            return BookingDto.builder().
+                    id(booking.getId()).
+                    item(ItemDtoMapper.toItemDto(booking.getItem())).
+                    booker(UserDtoMapper.toUserDto(booking.getBooker())).
+                    start(booking.getRentStartDate()).
+                    end(booking.getRentEndDate()).
+                    status(booking.getStatus()).build();
         } else return null;
     }
 

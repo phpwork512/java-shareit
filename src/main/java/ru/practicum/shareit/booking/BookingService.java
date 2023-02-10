@@ -51,7 +51,7 @@ public class BookingService {
      * @param bookerId             id пользователя, который делает запрос
      * @return объект типа Booking
      * @throws BookingItemUnavailableExceprion если запрашиваемая вещь недоступна для бронирования
-     * @throws ItemNotFoundException           если бронируется своя же вещь
+     * @throws ItemNotFoundException если бронируется своя же вещь
      */
     public Booking create(BookingCreateRequest bookingCreateRequest, long bookerId) throws BookingItemUnavailableExceprion, ItemNotFoundException {
         User booker = userService.getById(bookerId);
@@ -65,7 +65,13 @@ public class BookingService {
         }
 
         Booking booking = new Booking(0, item, booker, bookingCreateRequest.getStart(), bookingCreateRequest.getEnd(), WAITING);
-        return bookingRepository.save(booking);
+        booking = bookingRepository.save(booking);
+        updateItemBookings(item, booking);
+        return booking;
+    }
+
+    private void updateItemBookings(Item item, Booking booking) {
+
     }
 
     /**

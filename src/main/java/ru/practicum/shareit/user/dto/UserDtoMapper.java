@@ -1,5 +1,7 @@
 package ru.practicum.shareit.user.dto;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.user.User;
 
 import java.util.ArrayList;
@@ -8,11 +10,8 @@ import java.util.List;
 /**
  * утилитарный класс для преобразования User <--> UserDto
  */
-public class UserDtoMapper {
-
-    private UserDtoMapper() {
-    }
-
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class UserDtoMapper {
     /**
      * преобразовать dto в бизнес-объект User
      *
@@ -20,8 +19,15 @@ public class UserDtoMapper {
      * @return объект User или null если на входе был null
      */
     public static User toUser(UserDto userDto) {
-        if (userDto != null) return new User(userDto.getId(), userDto.getName(), userDto.getEmail());
-        else return null;
+        if (userDto != null) {
+            return User.builder().
+                    id(userDto.getId()).
+                    name(userDto.getName()).
+                    email(userDto.getEmail()).build();
+        }
+        else {
+            return null;
+        }
     }
 
     /**
@@ -31,8 +37,15 @@ public class UserDtoMapper {
      * @return объект UserDto или null если на входе был null
      */
     public static UserDto toUserDto(User user) {
-        if (user != null) return new UserDto(user.getId(), user.getName(), user.getEmail());
-        else return null;
+        if (user != null) {
+            return UserDto.builder().
+                id(user.getId()).
+                name(user.getName()).
+                email(user.getEmail()).build();
+        }
+        else {
+            return null;
+        }
     }
 
     /**

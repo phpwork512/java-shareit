@@ -1,5 +1,7 @@
 package ru.practicum.shareit.booking.validator;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.dto.BookingCreateRequest;
 
 import javax.validation.ValidationException;
@@ -9,10 +11,8 @@ import java.time.LocalDateTime;
  * Класс для дополнительной валидации данных бронирования
  */
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class BookingCreateValidator {
-    private BookingCreateValidator() {
-    }
-
     public static void validate(BookingCreateRequest bookingCreateRequest) throws ValidationException {
         //дата начала должна быть ранее даты конца
         if (bookingCreateRequest.getEnd().isBefore(bookingCreateRequest.getStart())) {

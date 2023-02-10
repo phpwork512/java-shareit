@@ -12,19 +12,19 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByBooker_idAndStatusOrderByRentStartDateDesc(long bookerId, BookingStatus rejected);
 
-    @Query("select b from Booking b join Item i on b.item.id = i.id where i.ownerId = ?1 order by b.rentStartDate desc")
+    @Query("SELECT b FROM Booking b JOIN Item i ON b.item.id = i.id WHERE i.ownerId = ?1 ORDER BY b.rentStartDate DESC")
     List<Booking> findBookingsOfItemsByOwnerId(long ownerId);
 
-    @Query("select b from Booking b join Item i on b.item.id = i.id where i.ownerId = ?1 and b.status = ?2 order by b.rentStartDate desc")
+    @Query("SELECT b FROM Booking b JOIN Item i ON b.item.id = i.id WHERE i.ownerId = ?1 AND b.status = ?2 ORDER BY b.rentStartDate DESC")
     List<Booking> findBookingsOfItemsByOwnerIdAndStatus(long ownerId, BookingStatus status);
 
-    @Query("select b from Booking b join Item i on b.item.id = i.id where i.ownerId = ?1 and b.rentStartDate > ?2 order by b.rentStartDate desc")
+    @Query("SELECT b FROM Booking b JOIN Item i ON b.item.id = i.id WHERE i.ownerId = ?1 AND b.rentStartDate > ?2 ORDER BY b.rentStartDate DESC")
     List<Booking> findBookingsOfItemsByOwnerIdInFuture(long ownerId, LocalDateTime now);
 
-    @Query("select b from Booking b join Item i on b.item.id = i.id where i.ownerId = ?1 and b.rentEndDate < ?2 order by b.rentStartDate desc")
+    @Query("SELECT b FROM Booking b JOIN Item i ON b.item.id = i.id WHERE i.ownerId = ?1 AND b.rentEndDate < ?2 ORDER BY b.rentStartDate DESC")
     List<Booking> findBookingsOfItemsByOwnerIdInPast(long ownerId, LocalDateTime now);
 
-    @Query("select b from Booking b join Item i on b.item.id = i.id where i.ownerId = ?1 and b.rentStartDate < ?2 and b.rentEndDate > ?2 order by b.rentStartDate desc")
+    @Query("SELECT b FROM Booking b JOIN Item i ON b.item.id = i.id WHERE i.ownerId = ?1 AND b.rentStartDate < ?2 AND b.rentEndDate > ?2 ORDER BY b.rentStartDate DESC")
     List<Booking> findBookingsOfItemsByOwnerIdInCurrent(long ownerId, LocalDateTime now);
 
     List<Booking> findByBooker_idAndRentStartDateAfterOrderByRentStartDateDesc(long bookerId, LocalDateTime now);

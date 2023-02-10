@@ -21,7 +21,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    private final static String X_HEADER_NAME = "X-Sharer-User-Id";
+    private static final String X_HEADER_NAME = "X-Sharer-User-Id";
 
     /**
      * сохранить новую вещь в хранилище, присвоить уникальный id

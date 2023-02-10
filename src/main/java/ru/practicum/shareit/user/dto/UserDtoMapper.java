@@ -24,8 +24,7 @@ public final class UserDtoMapper {
                 .id(userDto.getId())
                 .name(userDto.getName())
                 .email(userDto.getEmail()).build();
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -42,8 +41,7 @@ public final class UserDtoMapper {
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail()).build();
-        }
-        else {
+        } else {
             return null;
         }
     }

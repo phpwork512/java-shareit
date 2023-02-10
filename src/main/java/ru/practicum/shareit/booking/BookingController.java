@@ -20,7 +20,7 @@ import java.util.List;
 public class BookingController {
     private final BookingService bookingService;
 
-    private final static String X_HEADER_NAME = "X-Sharer-User-Id";
+    private static final String X_HEADER_NAME = "X-Sharer-User-Id";
 
     /**
      * Запрос создания нового бронирования

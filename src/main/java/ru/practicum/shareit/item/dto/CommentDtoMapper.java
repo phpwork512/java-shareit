@@ -13,21 +13,21 @@ public final class CommentDtoMapper {
         List<CommentDto> commentDtoList = new ArrayList<>();
         if (commentList != null) {
             for (Comment comment : commentList) {
-                commentDtoList.add(CommentDto.builder().
-                        id(comment.getId()).
-                        text(comment.getText()).
-                        authorName(comment.getAuthor().getName()).
-                        created(comment.getCreated()).build());
+                commentDtoList.add(CommentDto.builder()
+                        .id(comment.getId())
+                        .text(comment.getText())
+                        .authorName(comment.getAuthor().getName())
+                        .created(comment.getCreated()).build());
             }
         }
         return commentDtoList;
     }
 
     public static CommentDto toCommentDto(Comment comment) {
-        return CommentDto.builder().
-                id(comment.getId()).
-                text(comment.getText()).
-                authorName(comment.getAuthor().getName()).
-                created(comment.getCreated()).build();
+        return CommentDto.builder()
+            .id(comment.getId())
+            .text(comment.getText())
+            .authorName(comment.getAuthor().getName())
+            .created(comment.getCreated()).build();
     }
 }

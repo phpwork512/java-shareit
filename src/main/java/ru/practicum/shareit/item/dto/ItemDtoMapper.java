@@ -21,12 +21,11 @@ public final class ItemDtoMapper {
      */
     public static Item toItem(ItemDto itemDto) {
         if (itemDto != null) {
-            return Item.builder().
-                    id(itemDto.getId()).
-                    ownerId(0L).
-                    name(itemDto.getName()).
-                    description(itemDto.getDescription()).
-                    available(itemDto.getAvailable()).build();
+            return Item.builder()
+                .id(itemDto.getId())
+                .name(itemDto.getName())
+                .description(itemDto.getDescription())
+                .available(itemDto.getAvailable()).build();
         } else {
             return null;
         }
@@ -40,14 +39,14 @@ public final class ItemDtoMapper {
      */
     public static ItemDto toItemDto(Item item) {
         if (item != null) {
-            return ItemDto.builder().
-                    id(item.getId()).
-                    name(item.getName()).
-                    description(item.getDescription()).
-                    available(item.getAvailable()).
-                    lastBooking(BookingDtoMapper.toBookingShortDto(item.getLastBooking())).
-                    nextBooking(BookingDtoMapper.toBookingShortDto(item.getNextBooking())).
-                    comments(CommentDtoMapper.toCommentDtoList(item.getComments())).build();
+            return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .lastBooking(BookingDtoMapper.toBookingShortDto(item.getLastBooking()))
+                .nextBooking(BookingDtoMapper.toBookingShortDto(item.getNextBooking()))
+                .comments(CommentDtoMapper.toCommentDtoList(item.getComments())).build();
         } else {
             return null;
         }

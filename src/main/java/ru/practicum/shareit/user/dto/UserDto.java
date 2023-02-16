@@ -1,17 +1,19 @@
 package ru.practicum.shareit.user.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class UserDto {
     /**
      * id пользователя в системе, уникальное
      */
-    private int id;
+    private long id;
 
     /**
      * имя пользователя

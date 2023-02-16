@@ -5,10 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.exceptions.InvalidItemOwnerException;
-import ru.practicum.shareit.exceptions.ItemAccessDeniedException;
-import ru.practicum.shareit.exceptions.UserEmailNotUniqueException;
-import ru.practicum.shareit.exceptions.UserNotFoundException;
+import ru.practicum.shareit.exceptions.*;
 
 import javax.validation.ValidationException;
 
@@ -16,30 +13,34 @@ import javax.validation.ValidationException;
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler
+    @ExceptionHandler({ValidationException.class,
+            InvalidItemOwnerException.class,
+            BookingItemUnavailableExceprion.class,
+            BookingAlreadyApprovedException.class,
+            CommentAuthorHaveNoBookingsException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleValidationException(final ValidationException e) {
+    public ErrorResponse handleValidationException(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("error", e.getMessage());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleInvalidItemOwnerException(final InvalidItemOwnerException e) {
+    public ErrorResponse handleBookingUnsupportedStatusException(final BookingUnsupportedStatusException e) {
         log.info(e.getMessage());
-        return new ErrorResponse("error", e.getMessage());
+        return new ErrorResponse(e.getMessage(), e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({ItemAccessDeniedException.class, BookingAccessDeniedExceprion.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ErrorResponse handleItemAccessDeniedException(final ItemAccessDeniedException e) {
+    public ErrorResponse handleItemAccessDeniedException(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({UserNotFoundException.class, ItemNotFoundException.class, BookingNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFoundException(final UserNotFoundException e) {
+    public ErrorResponse handleNotFoundException(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("error", e.getMessage());
     }

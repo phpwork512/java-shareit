@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.Booking;
@@ -23,7 +25,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.practicum.shareit.booking.enums.BookingStatus.APPROVED;
 
 class ItemServiceTest {
@@ -54,8 +56,8 @@ class ItemServiceTest {
         Item simpleTestItem = makeSimpleTestItem();
 
         Mockito
-            .when(mockItemRepository.findById(Mockito.anyLong()))
-            .thenReturn(Optional.of(simpleTestItem));
+                .when(mockItemRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(simpleTestItem));
 
         Item item = itemService.getById(1);
 
@@ -93,12 +95,12 @@ class ItemServiceTest {
         List<Comment> testCommentList = List.of(
                 new Comment(1, "comment 1 text", simpleTestItem, testUserOwner, now.minusHours(1)),
                 new Comment(2, "comment 2 text", simpleTestItem, testUserBooker, now.minusMinutes(1))
-            );
+        );
 
         List<Booking> testBookingList = List.of(
                 new Booking(1, simpleTestItem, testUserBooker, now.minusHours(2), now.minusHours(1), APPROVED),
                 new Booking(2, simpleTestItem, testUserBooker, now.plusHours(1), now.plusHours(2), APPROVED)
-            );
+        );
 
         Mockito
                 .when(mockItemRepository.findById(Mockito.anyLong()))
@@ -204,7 +206,7 @@ class ItemServiceTest {
                 .when(mockItemRepository.save(Mockito.any(Item.class)))
                 .thenReturn(simpleTestItem);
 
-        Item item = itemService.update( simpleTestItem, 1);
+        Item item = itemService.update(simpleTestItem, 1);
 
         assertEquals(simpleTestItem, item);
     }

@@ -18,7 +18,6 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 import ru.practicum.shareit.validators.PaginationValidator;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class ItemService {
     /**
      * Получить объект Item с отзывами, а для владельца вещи будут добавлены данные о предыдущем и следующем бронировании
      *
-     * @param itemId id вещи
+     * @param itemId  id вещи
      * @param ownerId id текущего пользователя
      * @return объект типа Item
      */
@@ -85,6 +84,7 @@ public class ItemService {
 
     /**
      * метод загружает в объекты Item данные об отзывах
+     *
      * @param itemList список объектов типа Item
      */
     private void updateItemsWithComments(List<Item> itemList) {
@@ -103,6 +103,7 @@ public class ItemService {
 
     /**
      * метод загружает в объекты Item данные о предыдущем и следующем бронировании
+     *
      * @param itemList список объектов типа Item
      */
     private void updateItemsWithBookings(List<Item> itemList) {
@@ -118,14 +119,14 @@ public class ItemService {
                 Booking lastBooking = item.getLastBooking();
                 if (booking.getRentEndDate().isBefore(nowDateTime)
                         && (lastBooking == null
-                            || lastBooking.getRentEndDate().isBefore(booking.getRentEndDate()))) {
+                        || lastBooking.getRentEndDate().isBefore(booking.getRentEndDate()))) {
                     item.setLastBooking(booking);
                 }
 
                 Booking nextBooking = item.getNextBooking();
                 if (booking.getRentStartDate().isAfter(nowDateTime)
                         && (nextBooking == null
-                            || nextBooking.getRentStartDate().isAfter(booking.getRentStartDate()))) {
+                        || nextBooking.getRentStartDate().isAfter(booking.getRentStartDate()))) {
                     item.setNextBooking(booking);
                 }
             }
@@ -135,8 +136,8 @@ public class ItemService {
     /**
      * сохранить новую вещь в хранилище, присвоить уникальный id
      *
-     * @param itemCreateRequest    заполненный объект ItemCreateRequest
-     * @param ownerId id пользователя, который будет указан владельцем вещи
+     * @param itemCreateRequest заполненный объект ItemCreateRequest
+     * @param ownerId           id пользователя, который будет указан владельцем вещи
      * @return заполненный объект Item
      */
     public Item create(ItemCreateRequest itemCreateRequest, long ownerId) {
@@ -214,8 +215,9 @@ public class ItemService {
 
     /**
      * метод сохраняет новый отзыв к вещи
-     * @param text текст отзыва
-     * @param itemId id вещи
+     *
+     * @param text     текст отзыва
+     * @param itemId   id вещи
      * @param authorId id пользователя
      * @return объект типа Comment
      * @throws CommentAuthorHaveNoBookingsException если у пользователя нет завершенных бронирований этой вещи (не может оставлять отзыв)
@@ -234,7 +236,8 @@ public class ItemService {
 
     /**
      * метод для поиска одобренных завершенных бронирований вещи
-     * @param itemId id вещи
+     *
+     * @param itemId   id вещи
      * @param authorId id пользователя
      * @return true если бронирования были, false если бронирований не было
      */

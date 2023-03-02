@@ -11,7 +11,6 @@ import java.time.temporal.ChronoUnit;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @JsonTest
 class CommentDtoJsonTest {

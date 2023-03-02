@@ -4,9 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoMapper;
-import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.ItemRequestCreateRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoMapper;
@@ -27,8 +24,8 @@ public class ItemRequestController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public ItemRequestDto create(@Valid @RequestBody ItemRequestCreateRequest itemRequestCreateRequest,
-                                 @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") long requestAuthorId )
-                throws ValidationException {
+                                 @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") long requestAuthorId)
+            throws ValidationException {
         log.info("Create item request, owner {}: " + itemRequestCreateRequest.toString(), requestAuthorId);
         if (requestAuthorId <= 0) {
             throw new ValidationException("Указан ошибочный id автора запроса");
@@ -48,7 +45,7 @@ public class ItemRequestController {
     @ResponseStatus(HttpStatus.OK)
     public List<ItemRequestDto> getAll(@RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "20") int size,
-                                       @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") long requestAuthorId ) {
+                                       @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") long requestAuthorId) {
         log.info("Get all item requests from {} size {} requestAuthorId {}", from, size, requestAuthorId);
         return ItemRequestDtoMapper.toItemRequestDtoList(itemRequestService.getAll(from, size, requestAuthorId));
     }

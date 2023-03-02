@@ -9,7 +9,7 @@ import ru.practicum.shareit.exceptions.UserNotFoundException;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserServiceTest {
 

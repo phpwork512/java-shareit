@@ -2,12 +2,10 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.validators.PaginationValidator;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -26,7 +24,7 @@ public class ItemController {
      * сохранить новую вещь в хранилище, присвоить уникальный id
      *
      * @param itemCreateRequest заполненный валидированный объект ItemCreateRequest
-     * @param ownerId id пользователя, который будет указан владельцем вещи
+     * @param ownerId           id пользователя, который будет указан владельцем вещи
      * @return заполненный объект ItemDto
      * @throws ValidationException если указан ошибочный id пользователя-владельца (<=0)
      */
@@ -81,7 +79,7 @@ public class ItemController {
             throw new ValidationException("Указан ошибочный id владельца");
         }
 
-        return (List<ItemDto>) ItemDtoMapper.toItemDtoList(itemService.getOwnedItemsList(ownerId, from, size));
+        return ItemDtoMapper.toItemDtoList(itemService.getOwnedItemsList(ownerId, from, size));
     }
 
     /**
@@ -110,7 +108,7 @@ public class ItemController {
                                 @RequestParam(defaultValue = "") String text) {
         log.info("Search text '{}'", text);
         if (!text.isBlank()) {
-            return (List<ItemDto>) ItemDtoMapper.toItemDtoList(itemService.search(text, from, size));
+            return ItemDtoMapper.toItemDtoList(itemService.search(text, from, size));
         } else {
             return List.of();
         }

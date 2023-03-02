@@ -14,12 +14,12 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
 
 import javax.transaction.Transactional;
-
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Transactional
 @SpringBootTest(
@@ -37,10 +37,10 @@ class ItemServiceIntegrationTest {
         User owner = userService.create(new User(0, "owner name", "owner1@name.org"));
 
         Item item1 = itemService.create(
-                new ItemCreateRequest("item1 name", "item1 description", true,0),
+                new ItemCreateRequest("item1 name", "item1 description", true, 0),
                 owner.getId());
         Item item2 = itemService.create(
-                new ItemCreateRequest("item2 name", "item2 description", false,0),
+                new ItemCreateRequest("item2 name", "item2 description", false, 0),
                 owner.getId());
 
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);

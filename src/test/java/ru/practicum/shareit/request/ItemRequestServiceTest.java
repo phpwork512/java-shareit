@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import ru.practicum.shareit.exceptions.ItemRequestNotFoundException;
-import ru.practicum.shareit.exceptions.UserEmailNotUniqueException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
@@ -15,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ItemRequestServiceTest {
 
@@ -34,10 +33,10 @@ class ItemRequestServiceTest {
         Mockito
                 .when(mockItemRequestRepository.findById(Mockito.anyLong()))
                 .thenReturn(Optional.of(new ItemRequest(1,
-                          new User(1, "name", "e@mail.ru"),
-                "описание запроса",
-                          LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
-                          List.of())));
+                        new User(1, "name", "e@mail.ru"),
+                        "описание запроса",
+                        LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
+                        List.of())));
 
         ItemRequest itemRequest = itemRequestService.getById(1, 1);
 
@@ -101,10 +100,10 @@ class ItemRequestServiceTest {
                 .when(mockItemRequestRepository.findByRequestAuthor_idOrderByCreatedDesc(Mockito.anyLong()))
                 .thenReturn(List.of(
                         new ItemRequest(1,
-                            new User(1, "name1", "e@mail1.ru"),
-                            "описание запроса 1",
-                            LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
-                            List.of()),
+                                new User(1, "name1", "e@mail1.ru"),
+                                "описание запроса 1",
+                                LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
+                                List.of()),
 
                         new ItemRequest(2,
                                 new User(2, "name2", "e@mail2.ru"),

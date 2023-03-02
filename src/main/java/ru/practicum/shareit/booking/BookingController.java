@@ -24,8 +24,9 @@ public class BookingController {
 
     /**
      * Запрос создания нового бронирования
+     *
      * @param bookingCreateRequest данные для создания бронирования
-     * @param bookerId id пользователя, который делает запрос
+     * @param bookerId             id пользователя, который делает запрос
      * @return заполненный объект типа BookingDto
      * @throws ValidationException если данные не прошли валидацию
      */
@@ -45,9 +46,10 @@ public class BookingController {
 
     /**
      * Запрос подтверждения бронирования владельцем вещи
+     *
      * @param bookingId id бронирования
-     * @param approved вид действия: true - подтвердить, false - отклонить
-     * @param ownerId id пользователя, который делает запрос
+     * @param approved  вид действия: true - подтвердить, false - отклонить
+     * @param ownerId   id пользователя, который делает запрос
      * @return заполненный объект типа BookingDto
      */
     @PatchMapping("/{bookingId}")
@@ -66,8 +68,9 @@ public class BookingController {
 
     /**
      * Запросить бронирование с указанным id
+     *
      * @param bookingId id бронирования
-     * @param userId id пользователя, который делает запрос
+     * @param userId    id пользователя, который делает запрос
      * @return если запрос делает автор бронирования или владелец вещи - вернётся заполненный объект типа BookingDto, иначе - возникнет исключение
      */
     @GetMapping("/{bookingId}")
@@ -83,7 +86,8 @@ public class BookingController {
 
     /**
      * Запросить бронирования созданные определенным пользователем, с фильтрацией или без
-     * @param state вид фильтрации данных: по умолчанию равен ALL, может принимать значения CURRENT, PAST, FUTURE, WAITING, REJECTED
+     *
+     * @param state    вид фильтрации данных: по умолчанию равен ALL, может принимать значения CURRENT, PAST, FUTURE, WAITING, REJECTED
      * @param bookerId id пользователя, который делает запрос
      * @return список бронирований в виде списка объектов BookingDto
      */
@@ -102,7 +106,8 @@ public class BookingController {
 
     /**
      * Запросить бронирования вещей определенного пользователя, с фильтрацией или без
-     * @param state вид фильтрации данных: по умолчанию равен ALL, может принимать значения CURRENT, PAST, FUTURE, WAITING, REJECTED
+     *
+     * @param state   вид фильтрации данных: по умолчанию равен ALL, может принимать значения CURRENT, PAST, FUTURE, WAITING, REJECTED
      * @param ownerId id пользователя, который делает запрос
      * @return список бронирований в виде списка объектов BookingDto
      */

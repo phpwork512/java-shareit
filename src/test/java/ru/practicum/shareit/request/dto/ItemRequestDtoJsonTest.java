@@ -5,15 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.json.JsonContent;
-import ru.practicum.shareit.user.dto.UserDto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @JsonTest
 class ItemRequestDtoJsonTest {
@@ -22,7 +19,7 @@ class ItemRequestDtoJsonTest {
 
     @Test
     void testItemRequestDto() throws Exception {
-        ItemRequestDto itemRequestDto = new ItemRequestDto (
+        ItemRequestDto itemRequestDto = new ItemRequestDto(
                 1L,
                 "хочу вещь",
                 LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),

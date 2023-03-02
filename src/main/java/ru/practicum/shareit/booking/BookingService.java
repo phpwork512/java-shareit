@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dto.BookingCreateRequest;
 import ru.practicum.shareit.exceptions.*;
@@ -8,6 +9,7 @@ import ru.practicum.shareit.item.ItemService;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserService;
+import ru.practicum.shareit.validators.PaginationValidator;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -66,12 +68,7 @@ public class BookingService {
 
         Booking booking = new Booking(0, item, booker, bookingCreateRequest.getStart(), bookingCreateRequest.getEnd(), WAITING);
         booking = bookingRepository.save(booking);
-        updateItemBookings(item, booking);
         return booking;
-    }
-
-    private void updateItemBookings(Item item, Booking booking) {
-
     }
 
     /**
@@ -106,32 +103,33 @@ public class BookingService {
      * @return список объектов Booking
      * @throws BookingUnsupportedStatusException если указан неверный вид фильтрации
      */
-    public List<Booking> getBookingsByBookerId(long bookerId, String state) throws BookingUnsupportedStatusException {
+    public List<Booking> getBookingsByBookerId(long bookerId, String state, int from, int size) throws BookingUnsupportedStatusException {
         userService.getById(bookerId);
+        Pageable page = PaginationValidator.validate(from, size);
 
         if ("CURRENT".equals(state)) {
-            return bookingRepository.findByBooker_idAndRentStartDateBeforeAndRentEndDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), LocalDateTime.now());
+            return bookingRepository.findByBooker_idAndRentStartDateBeforeAndRentEndDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), LocalDateTime.now(), page);
         }
 
         if ("PAST".equals(state)) {
-            return bookingRepository.findByBooker_idAndRentEndDateBeforeOrderByRentStartDateDesc(bookerId, LocalDateTime.now());
+            return bookingRepository.findByBooker_idAndRentEndDateBeforeOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), page);
         }
 
         if ("FUTURE".equals(state)) {
-            return bookingRepository.findByBooker_idAndRentStartDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now());
+            return bookingRepository.findByBooker_idAndRentStartDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), page);
         }
 
         if ("WAITING".equals(state)) {
-            return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, WAITING);
+            return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, WAITING, page);
         }
 
         if ("REJECTED".equals(state)) {
-            return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, REJECTED);
+            return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, REJECTED, page);
         }
 
         //возвращаем все бронирования пользователя
         if ("ALL".equals(state)) {
-            return bookingRepository.findByBooker_idOrderByRentStartDateDesc(bookerId);
+            return bookingRepository.findByBooker_idOrderByRentStartDateDesc(bookerId, page);
         }
 
         throw new BookingUnsupportedStatusException("Unknown state: " + state);
@@ -145,32 +143,33 @@ public class BookingService {
      * @return список объектов Booking
      * @throws BookingUnsupportedStatusException если указан неверный вид фильтрации
      */
-    public List<Booking> getBookingsByOwnerId(long ownerId, String state) {
+    public List<Booking> getBookingsByOwnerId(long ownerId, String state, int from, int size) {
         userService.getById(ownerId);
+        Pageable page = PaginationValidator.validate(from, size);
 
         if ("CURRENT".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdInCurrent(ownerId, LocalDateTime.now());
+            return bookingRepository.findBookingsOfItemsByOwnerIdInCurrent(ownerId, LocalDateTime.now(), page);
         }
 
         if ("PAST".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdInPast(ownerId, LocalDateTime.now());
+            return bookingRepository.findBookingsOfItemsByOwnerIdInPast(ownerId, LocalDateTime.now(), page);
         }
 
         if ("FUTURE".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdInFuture(ownerId, LocalDateTime.now());
+            return bookingRepository.findBookingsOfItemsByOwnerIdInFuture(ownerId, LocalDateTime.now(), page);
         }
 
         if ("WAITING".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, WAITING);
+            return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, WAITING, page);
         }
 
         if ("REJECTED".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, REJECTED);
+            return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, REJECTED, page);
         }
 
         //возвращаем все бронирования всех вещей пользователя
         if ("ALL".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerId(ownerId);
+            return bookingRepository.findBookingsOfItemsByOwnerId(ownerId, page);
         }
 
         throw new BookingUnsupportedStatusException("Unknown state: " + state);

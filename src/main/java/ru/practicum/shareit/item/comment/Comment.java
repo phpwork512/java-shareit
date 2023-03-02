@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.comment;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "comments")
+@Builder
 public class Comment {
     /**
      * id отзыва, уникальное

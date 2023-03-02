@@ -1,6 +1,7 @@
 package ru.practicum.shareit.booking;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.enums.BookingStatus;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Entity
 @Table(name = "bookings")
+@Builder
 public class Booking {
     /**
      * id бронирования в системе, уникальное

@@ -2,13 +2,12 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.CommentDtoMapper;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoMapper;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.validators.PaginationValidator;
 
 import javax.validation.Valid;
 import javax.validation.ValidationException;
@@ -26,21 +25,21 @@ public class ItemController {
     /**
      * сохранить новую вещь в хранилище, присвоить уникальный id
      *
-     * @param item    заполненный валидированный объект Item
+     * @param itemCreateRequest заполненный валидированный объект ItemCreateRequest
      * @param ownerId id пользователя, который будет указан владельцем вещи
      * @return заполненный объект ItemDto
      * @throws ValidationException если указан ошибочный id пользователя-владельца (<=0)
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto create(@Valid @RequestBody Item item, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId)
+    public ItemDto create(@Valid @RequestBody ItemCreateRequest itemCreateRequest, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
-        log.info("Create item, owner {}: " + item.toString(), ownerId);
+        log.info("Create item, owner {}: " + itemCreateRequest.toString(), ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
         }
 
-        return ItemDtoMapper.toItemDto(itemService.create(item, ownerId));
+        return ItemDtoMapper.toItemDto(itemService.create(itemCreateRequest, ownerId));
     }
 
     /**
@@ -74,13 +73,15 @@ public class ItemController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getOwnedItemsList(@RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
+    public List<ItemDto> getOwnedItemsList(@RequestParam(defaultValue = "0") int from,
+                                           @RequestParam(defaultValue = "20") int size,
+                                           @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get owned items list, ownerId {}", ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
         }
 
-        return ItemDtoMapper.toItemDtoList(itemService.getOwnedItemsList(ownerId));
+        return (List<ItemDto>) ItemDtoMapper.toItemDtoList(itemService.getOwnedItemsList(ownerId, from, size));
     }
 
     /**
@@ -104,10 +105,12 @@ public class ItemController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> search(@RequestParam(defaultValue = "") String text) {
+    public List<ItemDto> search(@RequestParam(defaultValue = "0") int from,
+                                @RequestParam(defaultValue = "20") int size,
+                                @RequestParam(defaultValue = "") String text) {
         log.info("Search text '{}'", text);
         if (!text.isBlank()) {
-            return ItemDtoMapper.toItemDtoList(itemService.search(text));
+            return (List<ItemDto>) ItemDtoMapper.toItemDtoList(itemService.search(text, from, size));
         } else {
             return List.of();
         }

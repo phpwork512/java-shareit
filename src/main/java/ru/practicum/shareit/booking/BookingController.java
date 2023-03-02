@@ -89,13 +89,15 @@ public class BookingController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> getBookingsByBookerId(@RequestParam(defaultValue = "ALL") String state, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int bookerId) {
+    public List<BookingDto> getBookingsByBookerId(@RequestParam(defaultValue = "0") int from,
+                                                  @RequestParam(defaultValue = "20") int size,
+                                                  @RequestParam(defaultValue = "ALL") String state, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int bookerId) {
         log.info("Get bookings of booker id {}", bookerId);
         if (bookerId <= 0) {
             throw new ValidationException("Указан ошибочный id пользователя");
         }
 
-        return BookingDtoMapper.toBookingDtoList(bookingService.getBookingsByBookerId(bookerId, state));
+        return BookingDtoMapper.toBookingDtoList(bookingService.getBookingsByBookerId(bookerId, state, from, size));
     }
 
     /**
@@ -106,12 +108,14 @@ public class BookingController {
      */
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> getBookingsByOwnerId(@RequestParam(defaultValue = "ALL") String state, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
+    public List<BookingDto> getBookingsByOwnerId(@RequestParam(defaultValue = "0") int from,
+                                                 @RequestParam(defaultValue = "20") int size,
+                                                 @RequestParam(defaultValue = "ALL") String state, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get bookings of item of owner id {}", ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id пользователя");
         }
 
-        return BookingDtoMapper.toBookingDtoList(bookingService.getBookingsByOwnerId(ownerId, state));
+        return BookingDtoMapper.toBookingDtoList(bookingService.getBookingsByOwnerId(ownerId, state, from, size));
     }
 }

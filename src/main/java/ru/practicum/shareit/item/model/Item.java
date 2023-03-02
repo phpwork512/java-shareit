@@ -1,20 +1,15 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.booking.Booking;
 import ru.practicum.shareit.item.comment.Comment;
+import ru.practicum.shareit.request.ItemRequest;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-/**
- * TODO Sprint add-controllers.
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -77,4 +72,11 @@ public class Item {
      */
     @Transient
     private List<Comment> comments;
+
+    /**
+     * запрос, в ответ на который добавлена вещь
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private ItemRequest itemRequest;
 }

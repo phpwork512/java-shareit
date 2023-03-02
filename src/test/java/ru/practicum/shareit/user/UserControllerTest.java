@@ -32,8 +32,8 @@ class UserControllerTest {
 
     @Test
     void createUserEndpointTest() throws Exception {
-        Mockito.
-                when(userService.create(any(User.class)))
+        Mockito
+                .when(userService.create(any(User.class)))
                 .thenAnswer(invocationOnMock -> {
                     User user = invocationOnMock.getArgument(0, User.class);
                     user.setId(1);
@@ -55,8 +55,8 @@ class UserControllerTest {
 
     @Test
     void createUserEndpointTestDuplicatedEmail() throws Exception {
-        Mockito.
-                when(userService.create(any(User.class)))
+        Mockito
+                .when(userService.create(any(User.class)))
                 .thenThrow(new UserEmailNotUniqueException("E-mail не уникален"));
 
         User testUser = new User(0, "name", "e@mail.ru");
@@ -83,8 +83,8 @@ class UserControllerTest {
 
     @Test
     void updateUserEndpointTest() throws Exception {
-        Mockito.
-                when(userService.update(any(User.class)))
+        Mockito
+                .when(userService.update(any(User.class)))
                 .thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0, User.class));
 
         UserDto testUserDto = new UserDto(1, "name1", "e1@mail.ru");
@@ -104,8 +104,8 @@ class UserControllerTest {
     void getAllUsersEndpointTest() throws Exception {
         User testUser = new User(0, "name1", "e1@mail.ru");
 
-        Mockito.
-                when(userService.getAll())
+        Mockito
+                .when(userService.getAll())
                 .thenReturn(List.of(testUser));
 
         mvc.perform(get("/users")
@@ -119,8 +119,8 @@ class UserControllerTest {
     void getUserEndpointTest() throws Exception {
         User testUser = new User(0, "name1", "e1@mail.ru");
 
-        Mockito.
-                when(userService.getById(1))
+        Mockito
+                .when(userService.getById(1))
                 .thenReturn(testUser);
 
         mvc.perform(get("/users/1")

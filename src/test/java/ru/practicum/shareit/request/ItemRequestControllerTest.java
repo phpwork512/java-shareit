@@ -44,8 +44,8 @@ class ItemRequestControllerTest {
 
     @Test
     void createItemRequestEndpointTest() throws Exception {
-        Mockito.
-                when(itemRequestService.create(any(ItemRequest.class), anyLong()))
+        Mockito
+                .when(itemRequestService.create(any(ItemRequest.class), anyLong()))
                 .thenAnswer(invocationOnMock -> {
                     ItemRequest itemRequest = invocationOnMock.getArgument(0, ItemRequest.class);
                     long requestAuthor = invocationOnMock.getArgument(1, Long.class);
@@ -72,8 +72,8 @@ class ItemRequestControllerTest {
                 .requestId(1)
                 .description("хочу вещь 1")
                 .created(LocalDateTime.now()).build();
-        Mockito.
-                when(itemRequestService.getOwnItemRequests(anyLong()))
+        Mockito
+                .when(itemRequestService.getOwnItemRequests(anyLong()))
                 .thenReturn(List.of(itemRequest));
 
         mvc.perform(get("/requests")
@@ -90,8 +90,8 @@ class ItemRequestControllerTest {
                 .requestId(1)
                 .description("хочу вещь 1")
                 .created(LocalDateTime.now()).build();
-        Mockito.
-                when(itemRequestService.getAll(anyInt(), anyInt(), anyLong()))
+        Mockito
+                .when(itemRequestService.getAll(anyInt(), anyInt(), anyLong()))
                 .thenReturn(List.of(itemRequest));
 
         mvc.perform(get("/requests/all")
@@ -108,8 +108,8 @@ class ItemRequestControllerTest {
                 .requestId(1)
                 .description("хочу вещь 1")
                 .created(LocalDateTime.now()).build();
-        Mockito.
-                when(itemRequestService.getById(anyLong(), anyLong()))
+        Mockito
+                .when(itemRequestService.getById(anyLong(), anyLong()))
                 .thenReturn(itemRequest);
 
         mvc.perform(get("/requests/1")

@@ -48,8 +48,8 @@ class BookingControllerTest {
         User booker = new User(2, "booker", "booker@booker.ru");
         Item item1 = Item.builder().id(1).ownerId(1).name("вещь1").description("описание 1").available(true).build();
 
-        Mockito.
-                when(bookingService.create(any(BookingCreateRequest.class), anyLong()))
+        Mockito
+                .when(bookingService.create(any(BookingCreateRequest.class), anyLong()))
                 .thenAnswer(invocationOnMock -> {
                     BookingCreateRequest bookingCreateRequest = invocationOnMock.getArgument(0, BookingCreateRequest.class);
                     return new Booking(1, item1, booker, bookingCreateRequest.getStart(), bookingCreateRequest.getEnd(), WAITING);
@@ -79,8 +79,8 @@ class BookingControllerTest {
                                     .rentEndDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).plusHours(1))
                                     .status(APPROVED).build();
 
-        Mockito.
-                when(bookingService.approve(anyLong(), anyBoolean(), anyLong()))
+        Mockito
+                .when(bookingService.approve(anyLong(), anyBoolean(), anyLong()))
                 .thenReturn(approvedBooking);
 
         mvc.perform(patch("/bookings/1")
@@ -102,9 +102,9 @@ class BookingControllerTest {
                 .rentEndDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).plusHours(1))
                 .status(APPROVED).build();
 
-        Mockito.
-                when(bookingService.getById(anyLong(), anyLong()))
-                .thenReturn(approvedBooking);
+        Mockito
+            .when(bookingService.getById(anyLong(), anyLong()))
+            .thenReturn(approvedBooking);
 
         mvc.perform(get("/bookings/1")
                         .characterEncoding(StandardCharsets.UTF_8)
@@ -123,9 +123,9 @@ class BookingControllerTest {
                 .rentEndDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).plusHours(1))
                 .status(APPROVED).build();
 
-        Mockito.
-                when(bookingService.getBookingsByBookerId(anyLong(), anyString(), anyInt(), anyInt()))
-                .thenReturn(List.of(approvedBooking));
+        Mockito
+            .when(bookingService.getBookingsByBookerId(anyLong(), anyString(), anyInt(), anyInt()))
+            .thenReturn(List.of(approvedBooking));
 
         mvc.perform(get("/bookings")
                         .param("from", "0")
@@ -147,9 +147,9 @@ class BookingControllerTest {
                 .rentEndDate(LocalDateTime.now().truncatedTo(ChronoUnit.HOURS).plusHours(1))
                 .status(APPROVED).build();
 
-        Mockito.
-                when(bookingService.getBookingsByOwnerId(anyLong(), anyString(), anyInt(), anyInt()))
-                .thenReturn(List.of(approvedBooking));
+        Mockito
+            .when(bookingService.getBookingsByOwnerId(anyLong(), anyString(), anyInt(), anyInt()))
+            .thenReturn(List.of(approvedBooking));
 
         mvc.perform(get("/bookings/owner")
                         .param("from", "0")

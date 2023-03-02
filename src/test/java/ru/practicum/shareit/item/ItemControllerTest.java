@@ -47,8 +47,8 @@ class ItemControllerTest {
 
     @Test
     void createItemEndpointTest() throws Exception {
-        Mockito.
-                when(itemService.create(any(ItemCreateRequest.class), anyLong()))
+        Mockito
+                .when(itemService.create(any(ItemCreateRequest.class), anyLong()))
                 .thenAnswer(invocationOnMock -> {
                     ItemCreateRequest itemCreateRequest = invocationOnMock.getArgument(0, ItemCreateRequest.class);
                     Item item = ItemDtoMapper.toItem(itemCreateRequest);
@@ -72,8 +72,8 @@ class ItemControllerTest {
 
     @Test
     void updateItemEndpointTest() throws Exception {
-        Mockito.
-                when(itemService.update(any(Item.class), anyLong()))
+        Mockito
+                .when(itemService.update(any(Item.class), anyLong()))
                 .thenAnswer(invocationOnMock -> invocationOnMock.getArgument(0, Item.class));
 
         ItemDto itemDto = ItemDto.builder().id(1).name("вещь 2").description("очень хорошая вещь 2").build();
@@ -95,8 +95,8 @@ class ItemControllerTest {
         Item item1 = Item.builder().id(1).ownerId(1).name("вещь1").description("описание 1").available(true).build();
         Item item2 = Item.builder().id(2).ownerId(1).name("вещь2").description("описание 2").available(true).build();
 
-        Mockito.
-                when(itemService.getOwnedItemsList(anyLong(), anyInt(), anyInt()))
+        Mockito
+                .when(itemService.getOwnedItemsList(anyLong(), anyInt(), anyInt()))
                 .thenReturn(List.of(item1, item2));
 
         mvc.perform(get("/items")
@@ -111,8 +111,8 @@ class ItemControllerTest {
     void getItemEndpointTest() throws Exception {
         Item item1 = Item.builder().id(1).ownerId(1).name("вещь1").description("описание 1").available(true).build();
 
-        Mockito.
-                when(itemService.getById(anyLong(), anyLong()))
+        Mockito
+                .when(itemService.getById(anyLong(), anyLong()))
                 .thenReturn(item1);
 
         mvc.perform(get("/items/1")
@@ -128,8 +128,8 @@ class ItemControllerTest {
         Item item1 = Item.builder().id(1).ownerId(1).name("вещь 1").description("описание 1").available(true).build();
         Item item2 = Item.builder().id(2).ownerId(1).name("вещь 2").description("описание 2").available(true).build();
 
-        Mockito.
-                when(itemService.search(anyString(), anyInt(), anyInt()))
+        Mockito
+                .when(itemService.search(anyString(), anyInt(), anyInt()))
                 .thenReturn(List.of(item1, item2));
 
         mvc.perform(get("/items/search")
@@ -159,8 +159,8 @@ class ItemControllerTest {
         Comment comment = Comment.builder().id(1).text("комментарий к вещи 1").item(item1)
                 .author(authorUser).created(LocalDateTime.now()).build();
 
-        Mockito.
-                when(itemService.createComment(anyString(), anyLong(), anyLong()))
+        Mockito
+                .when(itemService.createComment(anyString(), anyLong(), anyLong()))
                 .thenReturn(comment);
 
         mvc.perform(post("/items/1/comment")

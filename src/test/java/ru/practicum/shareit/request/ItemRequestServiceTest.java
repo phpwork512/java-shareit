@@ -3,6 +3,10 @@ package ru.practicum.shareit.request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.exceptions.ItemRequestNotFoundException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.user.User;
@@ -11,8 +15,10 @@ import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -177,5 +183,30 @@ class ItemRequestServiceTest {
                 () -> itemRequestService.create(new ItemRequest(), 1));
 
         Assertions.assertEquals("Пользователь 1 не найден", exception.getMessage());
+    }
+
+    @Test
+    void getAllTest(){
+        UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(mockUserRepository);
+
+        ItemRequestRepository mockItemRequestRepository = Mockito.mock(ItemRequestRepository.class);
+        ItemRequestService itemRequestService = new ItemRequestService(mockItemRequestRepository, userService);
+
+        ItemRequest itemRequest = new ItemRequest(1,
+                new User(1, "name", "e@mail.ru"),
+                "описание запроса",
+                LocalDateTime.now().truncatedTo(ChronoUnit.HOURS),
+                List.of());
+        Page<ItemRequest> itemRequestPage = new PageImpl<>(List.of(itemRequest));
+
+        Mockito
+                .when(mockItemRequestRepository.findByRequestAuthor_idNotOrderByCreatedDesc(Mockito.anyLong(), Mockito.any(Pageable.class)))
+                .thenReturn(itemRequestPage);
+
+        List<ItemRequest> itemRequestList = itemRequestService.getAll(0, 20, 1);
+
+        assertEquals(1, itemRequestList.size());
+        assertEquals(1, itemRequestList.get(0).getRequestId());
     }
 }

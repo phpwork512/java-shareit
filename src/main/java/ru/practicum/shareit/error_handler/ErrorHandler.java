@@ -15,7 +15,6 @@ import javax.validation.ValidationException;
 public class ErrorHandler {
 
     @ExceptionHandler({ValidationException.class,
-            InvalidItemOwnerException.class,
             BookingItemUnavailableExceprion.class,
             BookingAlreadyApprovedException.class,
             CommentAuthorHaveNoBookingsException.class,
@@ -33,7 +32,7 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage(), e.getMessage());
     }
 
-    @ExceptionHandler({ItemAccessDeniedException.class, BookingAccessDeniedExceprion.class})
+    @ExceptionHandler({ItemAccessDeniedException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleItemAccessDeniedException(final RuntimeException e) {
         log.info(e.getMessage());

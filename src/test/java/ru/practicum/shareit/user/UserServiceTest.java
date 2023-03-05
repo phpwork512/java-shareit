@@ -7,8 +7,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import ru.practicum.shareit.exceptions.UserEmailNotUniqueException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserServiceTest {
@@ -141,5 +143,35 @@ class UserServiceTest {
                 () -> userService.update(new User(1, "name", "e@mail.ru")));
 
         Assertions.assertEquals("Пользователь 1 не найден", exception.getMessage());
+    }
+
+    @Test
+    void getAllTest(){
+        UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(mockUserRepository);
+
+        Mockito
+                .when(mockUserRepository.findAll())
+                .thenReturn(List.of(new User(1, "name", "e@mail.ru")));
+
+        List<User> userList = userService.getAll();
+
+        assertEquals(1, userList.size());
+        assertEquals(1, userList.get(0).getId());
+    }
+    @Test
+    void deleteTest(){
+        UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
+        UserService userService = new UserService(mockUserRepository);
+
+        User userToDelete = new User(1, "name", "e@mail.ru");
+        Mockito
+                .when(mockUserRepository.findById(Mockito.anyLong()))
+                .thenReturn(Optional.of(userToDelete));
+
+        userService.delete(1);
+
+        Mockito.verify(mockUserRepository, Mockito.times(1))
+                .delete(userToDelete);
     }
 }

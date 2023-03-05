@@ -228,6 +228,7 @@ class ItemControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(CommentDtoMapper.toCommentDto(comment))));
     }
+
     @Test
     void createCommentOnItemEndpointExceptionTest() throws Exception {
         User authorUser = new User(1, "user name", "user@email.com");

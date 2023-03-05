@@ -6,7 +6,6 @@ import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import ru.practicum.shareit.exceptions.ItemRequestNotFoundException;
 import ru.practicum.shareit.exceptions.UserNotFoundException;
 import ru.practicum.shareit.user.User;
@@ -15,10 +14,8 @@ import ru.practicum.shareit.user.UserService;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -186,7 +183,7 @@ class ItemRequestServiceTest {
     }
 
     @Test
-    void getAllTest(){
+    void getAllTest() {
         UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
         UserService userService = new UserService(mockUserRepository);
 

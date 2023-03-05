@@ -42,7 +42,8 @@ class ItemDtoMapperTest {
         Item item = ItemDtoMapper.toItem((ItemDto) null);
         assertNull(item);
     }
-        @Test
+
+    @Test
     void toItemDtoTest() {
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS);
         User itemOwner = new User(1, "name", "e@mail.ru");

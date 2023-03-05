@@ -146,7 +146,7 @@ class UserServiceTest {
     }
 
     @Test
-    void getAllTest(){
+    void getAllTest() {
         UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
         UserService userService = new UserService(mockUserRepository);
 
@@ -159,8 +159,9 @@ class UserServiceTest {
         assertEquals(1, userList.size());
         assertEquals(1, userList.get(0).getId());
     }
+
     @Test
-    void deleteTest(){
+    void deleteTest() {
         UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
         UserService userService = new UserService(mockUserRepository);
 

@@ -64,6 +64,19 @@ class ItemControllerTest {
     }
 
     @Test
+    void createItemEndpointExceptionTest() throws Exception {
+        ItemCreateRequest itemCreateRequest = new ItemCreateRequest("вещь 1", "очень хорошая вещь 1 почти новая", true, 0);
+
+        mvc.perform(post("/items")
+                        .content(mapper.writeValueAsString(itemCreateRequest))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(X_HEADER_NAME, -1))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void updateItemEndpointTest() throws Exception {
         Mockito
                 .when(itemService.update(any(Item.class), anyLong()))
@@ -84,6 +97,19 @@ class ItemControllerTest {
     }
 
     @Test
+    void updateItemEndpointExceptionTest() throws Exception {
+        ItemDto itemDto = ItemDto.builder().id(1).name("вещь 2").description("очень хорошая вещь 2").build();
+
+        mvc.perform(patch("/items/1")
+                        .content(mapper.writeValueAsString(itemDto))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(X_HEADER_NAME, -1))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void getOwnedItemsListEndpointTest() throws Exception {
         Item item1 = Item.builder().id(1).ownerId(1).name("вещь1").description("описание 1").available(true).build();
         Item item2 = Item.builder().id(2).ownerId(1).name("вещь2").description("описание 2").available(true).build();
@@ -98,6 +124,15 @@ class ItemControllerTest {
                         .header(X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(ItemDtoMapper.toItemDtoList(List.of(item1, item2)))));
+    }
+
+    @Test
+    void getOwnedItemsListEndpointExceptionTest() throws Exception {
+        mvc.perform(get("/items")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(X_HEADER_NAME, -1))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -137,12 +172,40 @@ class ItemControllerTest {
     }
 
     @Test
+    void searchItemsEndpointWithEmptyTextTest() throws Exception {
+        Item item1 = Item.builder().id(1).ownerId(1).name("вещь 1").description("описание 1").available(true).build();
+        Item item2 = Item.builder().id(2).ownerId(1).name("вещь 2").description("описание 2").available(true).build();
+
+        Mockito
+                .when(itemService.search(anyString(), anyInt(), anyInt()))
+                .thenReturn(List.of(item1, item2));
+
+        mvc.perform(get("/items/search")
+                        .param("text", "")
+                        .param("from", "0")
+                        .param("size", "20")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(mapper.writeValueAsString(List.of())));
+    }
+
+    @Test
     void deleteItemEndPointTest() throws Exception {
         mvc.perform(delete("/items/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(X_HEADER_NAME, 1))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void deleteItemEndPointExceptionTest() throws Exception {
+        mvc.perform(delete("/items/1")
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(X_HEADER_NAME, -1))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -164,5 +227,24 @@ class ItemControllerTest {
                         .header(X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(CommentDtoMapper.toCommentDto(comment))));
+    }
+    @Test
+    void createCommentOnItemEndpointExceptionTest() throws Exception {
+        User authorUser = new User(1, "user name", "user@email.com");
+        Item item1 = Item.builder().id(1).ownerId(1).name("вещь 1").description("описание 1").available(true).build();
+        Comment comment = Comment.builder().id(1).text("комментарий к вещи 1").item(item1)
+                .author(authorUser).created(LocalDateTime.now()).build();
+
+        Mockito
+                .when(itemService.createComment(anyString(), anyLong(), anyLong()))
+                .thenReturn(comment);
+
+        mvc.perform(post("/items/1/comment")
+                        .content(mapper.writeValueAsString(CommentDtoMapper.toCommentDto(comment)))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(X_HEADER_NAME, -1))
+                .andExpect(status().isBadRequest());
     }
 }

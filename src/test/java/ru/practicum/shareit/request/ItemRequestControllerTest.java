@@ -59,6 +59,19 @@ class ItemRequestControllerTest {
     }
 
     @Test
+    void createItemRequestEndpointExceptionTest() throws Exception {
+        ItemRequestCreateRequest itemRequestCreateRequest = new ItemRequestCreateRequest("хочу вещь 1");
+
+        mvc.perform(post("/requests")
+                        .content(mapper.writeValueAsString(itemRequestCreateRequest))
+                        .characterEncoding(StandardCharsets.UTF_8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .header(X_HEADER_NAME, -1))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void getOwnItemRequestsEndpointTest() throws Exception {
         ItemRequest itemRequest = ItemRequest.builder()
                 .requestId(1)

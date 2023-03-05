@@ -59,9 +59,6 @@ public class BookingController {
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
         }
-        if (approved == null) {
-            throw new ValidationException("Не передан параметр approved");
-        }
 
         return BookingDtoMapper.toBookingDto(bookingService.approve(bookingId, approved, ownerId));
     }

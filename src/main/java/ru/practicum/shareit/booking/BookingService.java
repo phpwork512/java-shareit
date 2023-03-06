@@ -107,32 +107,28 @@ public class BookingService {
         userService.getById(bookerId);
         Pageable page = PaginationValidator.validate(from, size);
 
-        if ("CURRENT".equals(state)) {
-            return bookingRepository.findByBooker_idAndRentStartDateBeforeAndRentEndDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), LocalDateTime.now(), page);
-        }
+        switch (state) {
+            case "CURRENT":
+                return bookingRepository.findByBooker_idAndRentStartDateBeforeAndRentEndDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), LocalDateTime.now(), page);
 
-        if ("PAST".equals(state)) {
-            return bookingRepository.findByBooker_idAndRentEndDateBeforeOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), page);
-        }
+            case "PAST":
+                return bookingRepository.findByBooker_idAndRentEndDateBeforeOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), page);
 
-        if ("FUTURE".equals(state)) {
-            return bookingRepository.findByBooker_idAndRentStartDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), page);
-        }
+            case "FUTURE":
+                return bookingRepository.findByBooker_idAndRentStartDateAfterOrderByRentStartDateDesc(bookerId, LocalDateTime.now(), page);
 
-        if ("WAITING".equals(state)) {
-            return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, WAITING, page);
-        }
+            case "WAITING":
+                return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, WAITING, page);
 
-        if ("REJECTED".equals(state)) {
-            return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, REJECTED, page);
-        }
+            case "REJECTED":
+                return bookingRepository.findByBooker_idAndStatusOrderByRentStartDateDesc(bookerId, REJECTED, page);
 
-        //возвращаем все бронирования пользователя
-        if ("ALL".equals(state)) {
-            return bookingRepository.findByBooker_idOrderByRentStartDateDesc(bookerId, page);
-        }
+            case "ALL":
+                return bookingRepository.findByBooker_idOrderByRentStartDateDesc(bookerId, page);
 
-        throw new BookingUnsupportedStatusException("Unknown state: " + state);
+            default:
+                throw new BookingUnsupportedStatusException("Unknown state: " + state);
+        }
     }
 
     /**
@@ -147,31 +143,27 @@ public class BookingService {
         userService.getById(ownerId);
         Pageable page = PaginationValidator.validate(from, size);
 
-        if ("CURRENT".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdInCurrent(ownerId, LocalDateTime.now(), page);
-        }
+        switch (state) {
+            case "CURRENT":
+                return bookingRepository.findBookingsOfItemsByOwnerIdInCurrent(ownerId, LocalDateTime.now(), page);
 
-        if ("PAST".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdInPast(ownerId, LocalDateTime.now(), page);
-        }
+            case "PAST":
+                return bookingRepository.findBookingsOfItemsByOwnerIdInPast(ownerId, LocalDateTime.now(), page);
 
-        if ("FUTURE".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdInFuture(ownerId, LocalDateTime.now(), page);
-        }
+            case "FUTURE":
+                return bookingRepository.findBookingsOfItemsByOwnerIdInFuture(ownerId, LocalDateTime.now(), page);
 
-        if ("WAITING".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, WAITING, page);
-        }
+            case "WAITING":
+                return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, WAITING, page);
 
-        if ("REJECTED".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, REJECTED, page);
-        }
+            case "REJECTED":
+                return bookingRepository.findBookingsOfItemsByOwnerIdAndStatus(ownerId, REJECTED, page);
 
-        //возвращаем все бронирования всех вещей пользователя
-        if ("ALL".equals(state)) {
-            return bookingRepository.findBookingsOfItemsByOwnerId(ownerId, page);
-        }
+            case "ALL":
+                return bookingRepository.findBookingsOfItemsByOwnerId(ownerId, page);
 
-        throw new BookingUnsupportedStatusException("Unknown state: " + state);
+            default:
+                throw new BookingUnsupportedStatusException("Unknown state: " + state);
+        }
     }
 }

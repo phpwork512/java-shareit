@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.common.Constants;
 import ru.practicum.shareit.item.comment.Comment;
 import ru.practicum.shareit.item.dto.CommentDtoMapper;
 import ru.practicum.shareit.item.dto.ItemCreateRequest;
@@ -36,8 +37,6 @@ class ItemControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private static final String X_HEADER_NAME = "X-Sharer-User-Id";
-
     @Test
     void createItemEndpointTest() throws Exception {
         Mockito
@@ -56,7 +55,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("вещь 1")))
@@ -72,7 +71,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, -1))
+                        .header(Constants.X_HEADER_NAME, -1))
                 .andExpect(status().isBadRequest());
     }
 
@@ -89,7 +88,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.name", is("вещь 2")))
@@ -105,7 +104,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, -1))
+                        .header(Constants.X_HEADER_NAME, -1))
                 .andExpect(status().isBadRequest());
     }
 
@@ -121,7 +120,7 @@ class ItemControllerTest {
         mvc.perform(get("/items")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(ItemDtoMapper.toItemDtoList(List.of(item1, item2)))));
     }
@@ -131,7 +130,7 @@ class ItemControllerTest {
         mvc.perform(get("/items")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, -1))
+                        .header(Constants.X_HEADER_NAME, -1))
                 .andExpect(status().isBadRequest());
     }
 
@@ -146,7 +145,7 @@ class ItemControllerTest {
         mvc.perform(get("/items/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(ItemDtoMapper.toItemDto(item1))));
     }
@@ -166,7 +165,7 @@ class ItemControllerTest {
                         .param("size", "20")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(ItemDtoMapper.toItemDtoList(List.of(item1, item2)))));
     }
@@ -195,7 +194,7 @@ class ItemControllerTest {
         mvc.perform(delete("/items/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk());
     }
 
@@ -204,7 +203,7 @@ class ItemControllerTest {
         mvc.perform(delete("/items/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, -1))
+                        .header(Constants.X_HEADER_NAME, -1))
                 .andExpect(status().isBadRequest());
     }
 
@@ -224,7 +223,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(CommentDtoMapper.toCommentDto(comment))));
     }
@@ -245,7 +244,7 @@ class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, -1))
+                        .header(Constants.X_HEADER_NAME, -1))
                 .andExpect(status().isBadRequest());
     }
 }

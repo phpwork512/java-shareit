@@ -30,7 +30,7 @@ public class ItemController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ItemDto create(@Valid @RequestBody ItemCreateRequest itemCreateRequest,
-                          @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId)
+                          @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
         log.info("Create item, owner {}: " + itemCreateRequest.toString(), ownerId);
         if (ownerId <= 0) {
@@ -52,7 +52,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public ItemDto update(@PathVariable int itemId,
                           @Valid @RequestBody ItemDto itemDto,
-                          @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId)
+                          @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
         log.info("Update item {}, ownerId {}: " + itemDto, itemId, ownerId);
         if (ownerId <= 0) {
@@ -73,9 +73,9 @@ public class ItemController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getOwnedItemsList(@RequestParam(defaultValue="0") int from,
-                                           @RequestParam(defaultValue="20") int size,
-                                           @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId) {
+    public List<ItemDto> getOwnedItemsList(@RequestParam(defaultValue = "0") int from,
+                                           @RequestParam(defaultValue = "20") int size,
+                                           @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get owned items list, ownerId {}", ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
@@ -93,7 +93,7 @@ public class ItemController {
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ItemDto get(@PathVariable int itemId,
-                       @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId) {
+                       @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get itemId {}", itemId);
         return ItemDtoMapper.toItemDto(itemService.getById(itemId, ownerId));
     }
@@ -106,9 +106,9 @@ public class ItemController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> search(@RequestParam(defaultValue="0") int from,
-                                @RequestParam(defaultValue="20") int size,
-                                @RequestParam(defaultValue="") String text) {
+    public List<ItemDto> search(@RequestParam(defaultValue = "0") int from,
+                                @RequestParam(defaultValue = "20") int size,
+                                @RequestParam(defaultValue = "") String text) {
         log.info("Search text '{}'", text);
         if (!text.isBlank()) {
             return ItemDtoMapper.toItemDtoList(itemService.search(text, from, size));
@@ -126,7 +126,7 @@ public class ItemController {
     @DeleteMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable int itemId,
-                       @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId) {
+                       @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Delete itemId {}, ownerId {}", itemId, ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
@@ -148,7 +148,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     public CommentDto createComment(@Valid @RequestBody CommentDto commentDto,
                                     @PathVariable int itemId,
-                                    @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int authorId)
+                                    @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int authorId)
             throws ValidationException {
         log.info("Create comment for item {}, author {}: " + commentDto.toString(), itemId, authorId);
         if (authorId <= 0) {

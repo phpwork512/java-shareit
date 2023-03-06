@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.shareit.common.Constants;
 import ru.practicum.shareit.request.dto.ItemRequestCreateRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoMapper;
 
@@ -32,8 +33,6 @@ class ItemRequestControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    private static final String X_HEADER_NAME = "X-Sharer-User-Id";
-
     @Test
     void createItemRequestEndpointTest() throws Exception {
         Mockito
@@ -52,7 +51,7 @@ class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.description", is("хочу вещь 1")));
@@ -67,7 +66,7 @@ class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, -1))
+                        .header(Constants.X_HEADER_NAME, -1))
                 .andExpect(status().isBadRequest());
     }
 
@@ -84,7 +83,7 @@ class ItemRequestControllerTest {
         mvc.perform(get("/requests")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(ItemRequestDtoMapper.toItemRequestDtoList(List.of(itemRequest)))));
     }
@@ -102,7 +101,7 @@ class ItemRequestControllerTest {
         mvc.perform(get("/requests/all")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(ItemRequestDtoMapper.toItemRequestDtoList(List.of(itemRequest)))));
     }
@@ -120,7 +119,7 @@ class ItemRequestControllerTest {
         mvc.perform(get("/requests/1")
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(X_HEADER_NAME, 1))
+                        .header(Constants.X_HEADER_NAME, 1))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.description", is("хочу вещь 1")));

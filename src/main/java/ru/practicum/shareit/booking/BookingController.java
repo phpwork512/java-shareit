@@ -32,7 +32,7 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public BookingDto create(@Valid @RequestBody BookingCreateRequest bookingCreateRequest,
-                             @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") long bookerId)
+                             @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") long bookerId)
             throws ValidationException {
         log.info("Create booking, booker {}: " + bookingCreateRequest.toString(), bookerId);
         if (bookerId <= 0) {
@@ -56,7 +56,7 @@ public class BookingController {
     @ResponseStatus(HttpStatus.OK)
     public BookingDto approve(@PathVariable long bookingId,
                               @RequestParam Boolean approved,
-                              @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId) {
+                              @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Approve booking {}, ownerId {}, approved {}", bookingId, ownerId, approved);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
@@ -75,7 +75,7 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     @ResponseStatus(HttpStatus.OK)
     public BookingDto get(@PathVariable long bookingId,
-                          @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int userId) {
+                          @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int userId) {
         log.info("Get booking {}, userId {}", bookingId, userId);
         if (userId <= 0) {
             throw new ValidationException("Указан ошибочный id пользователя");
@@ -93,10 +93,10 @@ public class BookingController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> getBookingsByBookerId(@RequestParam(defaultValue="0") int from,
-                                                  @RequestParam(defaultValue="20") int size,
-                                                  @RequestParam(defaultValue="ALL") String state,
-                                                  @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int bookerId) {
+    public List<BookingDto> getBookingsByBookerId(@RequestParam(defaultValue = "0") int from,
+                                                  @RequestParam(defaultValue = "20") int size,
+                                                  @RequestParam(defaultValue = "ALL") String state,
+                                                  @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int bookerId) {
         log.info("Get bookings of booker id {}", bookerId);
         if (bookerId <= 0) {
             throw new ValidationException("Указан ошибочный id пользователя");
@@ -114,10 +114,10 @@ public class BookingController {
      */
     @GetMapping("/owner")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDto> getBookingsByOwnerId(@RequestParam(defaultValue="0") int from,
-                                                 @RequestParam(defaultValue="20") int size,
-                                                 @RequestParam(defaultValue="ALL") String state,
-                                                 @RequestHeader(value=Constants.X_HEADER_NAME, defaultValue="0") int ownerId) {
+    public List<BookingDto> getBookingsByOwnerId(@RequestParam(defaultValue = "0") int from,
+                                                 @RequestParam(defaultValue = "20") int size,
+                                                 @RequestParam(defaultValue = "ALL") String state,
+                                                 @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get bookings of item of owner id {}", ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id пользователя");

@@ -4,10 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.CommentDto;
-import ru.practicum.shareit.item.dto.CommentDtoMapper;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.ItemDtoMapper;
+import ru.practicum.shareit.common.Constants;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 
 import javax.validation.Valid;
@@ -21,26 +19,25 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    private static final String X_HEADER_NAME = "X-Sharer-User-Id";
-
     /**
      * сохранить новую вещь в хранилище, присвоить уникальный id
      *
-     * @param item    заполненный валидированный объект Item
-     * @param ownerId id пользователя, который будет указан владельцем вещи
+     * @param itemCreateRequest заполненный валидированный объект ItemCreateRequest
+     * @param ownerId           id пользователя, который будет указан владельцем вещи
      * @return заполненный объект ItemDto
      * @throws ValidationException если указан ошибочный id пользователя-владельца (<=0)
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto create(@Valid @RequestBody Item item, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId)
+    public ItemDto create(@Valid @RequestBody ItemCreateRequest itemCreateRequest,
+                          @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
-        log.info("Create item, owner {}: " + item.toString(), ownerId);
+        log.info("Create item, owner {}: " + itemCreateRequest.toString(), ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
         }
 
-        return ItemDtoMapper.toItemDto(itemService.create(item, ownerId));
+        return ItemDtoMapper.toItemDto(itemService.create(itemCreateRequest, ownerId));
     }
 
     /**
@@ -53,7 +50,9 @@ public class ItemController {
      */
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto update(@PathVariable int itemId, @Valid @RequestBody ItemDto itemDto, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId)
+    public ItemDto update(@PathVariable int itemId,
+                          @Valid @RequestBody ItemDto itemDto,
+                          @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId)
             throws ValidationException {
         log.info("Update item {}, ownerId {}: " + itemDto, itemId, ownerId);
         if (ownerId <= 0) {
@@ -74,13 +73,15 @@ public class ItemController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getOwnedItemsList(@RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
+    public List<ItemDto> getOwnedItemsList(@RequestParam(defaultValue = "0") int from,
+                                           @RequestParam(defaultValue = "20") int size,
+                                           @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get owned items list, ownerId {}", ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
         }
 
-        return ItemDtoMapper.toItemDtoList(itemService.getOwnedItemsList(ownerId));
+        return ItemDtoMapper.toItemDtoList(itemService.getOwnedItemsList(ownerId, from, size));
     }
 
     /**
@@ -91,7 +92,8 @@ public class ItemController {
      */
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto get(@PathVariable int itemId, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
+    public ItemDto get(@PathVariable int itemId,
+                       @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Get itemId {}", itemId);
         return ItemDtoMapper.toItemDto(itemService.getById(itemId, ownerId));
     }
@@ -104,10 +106,12 @@ public class ItemController {
      */
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> search(@RequestParam(defaultValue = "") String text) {
+    public List<ItemDto> search(@RequestParam(defaultValue = "0") int from,
+                                @RequestParam(defaultValue = "20") int size,
+                                @RequestParam(defaultValue = "") String text) {
         log.info("Search text '{}'", text);
         if (!text.isBlank()) {
-            return ItemDtoMapper.toItemDtoList(itemService.search(text));
+            return ItemDtoMapper.toItemDtoList(itemService.search(text, from, size));
         } else {
             return List.of();
         }
@@ -121,7 +125,8 @@ public class ItemController {
      */
     @DeleteMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable int itemId, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int ownerId) {
+    public void delete(@PathVariable int itemId,
+                       @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int ownerId) {
         log.info("Delete itemId {}, ownerId {}", itemId, ownerId);
         if (ownerId <= 0) {
             throw new ValidationException("Указан ошибочный id владельца");
@@ -141,7 +146,9 @@ public class ItemController {
      */
     @PostMapping("/{itemId}/comment")
     @ResponseStatus(HttpStatus.OK)
-    public CommentDto createComment(@Valid @RequestBody CommentDto commentDto, @PathVariable int itemId, @RequestHeader(value = X_HEADER_NAME, defaultValue = "0") int authorId)
+    public CommentDto createComment(@Valid @RequestBody CommentDto commentDto,
+                                    @PathVariable int itemId,
+                                    @RequestHeader(value = Constants.X_HEADER_NAME, defaultValue = "0") int authorId)
             throws ValidationException {
         log.info("Create comment for item {}, author {}: " + commentDto.toString(), itemId, authorId);
         if (authorId <= 0) {

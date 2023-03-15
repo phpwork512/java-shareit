@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.shareit.exceptions.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 @RestControllerAdvice
@@ -14,10 +15,10 @@ import javax.validation.ValidationException;
 public class ErrorHandler {
 
     @ExceptionHandler({ValidationException.class,
-            InvalidItemOwnerException.class,
             BookingItemUnavailableExceprion.class,
             BookingAlreadyApprovedException.class,
-            CommentAuthorHaveNoBookingsException.class})
+            CommentAuthorHaveNoBookingsException.class,
+            InvalidPaginationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final RuntimeException e) {
         log.info(e.getMessage());
@@ -31,14 +32,17 @@ public class ErrorHandler {
         return new ErrorResponse(e.getMessage(), e.getMessage());
     }
 
-    @ExceptionHandler({ItemAccessDeniedException.class, BookingAccessDeniedExceprion.class})
+    @ExceptionHandler({ItemAccessDeniedException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleItemAccessDeniedException(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler({UserNotFoundException.class, ItemNotFoundException.class, BookingNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class,
+            ItemNotFoundException.class,
+            BookingNotFoundException.class,
+            ItemRequestNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final RuntimeException e) {
         log.info(e.getMessage());
@@ -52,7 +56,9 @@ public class ErrorHandler {
         return new ErrorResponse("error", e.getMessage());
     }
 
-    @ExceptionHandler({NullPointerException.class, IllegalArgumentException.class})
+    @ExceptionHandler({NullPointerException.class,
+            IllegalArgumentException.class,
+            EntityNotFoundException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse serverExceptionHandler(RuntimeException e) {
         log.info(e.getMessage(), e);

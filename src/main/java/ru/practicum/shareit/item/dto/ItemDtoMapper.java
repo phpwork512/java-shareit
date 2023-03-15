@@ -22,10 +22,10 @@ public final class ItemDtoMapper {
     public static Item toItem(ItemDto itemDto) {
         if (itemDto != null) {
             return Item.builder()
-                .id(itemDto.getId())
-                .name(itemDto.getName())
-                .description(itemDto.getDescription())
-                .available(itemDto.getAvailable()).build();
+                    .id(itemDto.getId())
+                    .name(itemDto.getName())
+                    .description(itemDto.getDescription())
+                    .available(itemDto.getAvailable()).build();
         } else {
             return null;
         }
@@ -39,14 +39,20 @@ public final class ItemDtoMapper {
      */
     public static ItemDto toItemDto(Item item) {
         if (item != null) {
-            return ItemDto.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .lastBooking(BookingDtoMapper.toBookingShortDto(item.getLastBooking()))
-                .nextBooking(BookingDtoMapper.toBookingShortDto(item.getNextBooking()))
-                .comments(CommentDtoMapper.toCommentDtoList(item.getComments())).build();
+            ItemDto itemDto = ItemDto.builder()
+                    .id(item.getId())
+                    .name(item.getName())
+                    .description(item.getDescription())
+                    .available(item.getAvailable())
+                    .lastBooking(BookingDtoMapper.toBookingShortDto(item.getLastBooking()))
+                    .nextBooking(BookingDtoMapper.toBookingShortDto(item.getNextBooking()))
+                    .comments(CommentDtoMapper.toCommentDtoList(item.getComments())).build();
+
+            if (item.getItemRequest() != null) {
+                itemDto.setRequestId(item.getItemRequest().getRequestId());
+            }
+
+            return itemDto;
         } else {
             return null;
         }
@@ -68,5 +74,46 @@ public final class ItemDtoMapper {
         }
 
         return itemDtoList;
+    }
+
+    public static Item toItem(ItemCreateRequest itemCreateRequest) {
+        if (itemCreateRequest != null) {
+            return Item.builder()
+                    .name(itemCreateRequest.getName())
+                    .description(itemCreateRequest.getDescription())
+                    .available(itemCreateRequest.getAvailable()).build();
+        } else {
+            return null;
+        }
+    }
+
+    public static ItemSmallDto toItemSmallDto(Item item) {
+        if (item != null) {
+            ItemSmallDto itemSmallDto = ItemSmallDto.builder()
+                    .id(item.getId())
+                    .name(item.getName())
+                    .description(item.getDescription())
+                    .available(item.getAvailable()).build();
+
+            if (item.getItemRequest() != null) {
+                itemSmallDto.setRequestId(item.getItemRequest().getRequestId());
+            }
+
+            return itemSmallDto;
+        } else {
+            return null;
+        }
+    }
+
+    public static List<ItemSmallDto> toItemSmallDtoList(List<Item> itemList) {
+        List<ItemSmallDto> itemSmallDtoList = new ArrayList<>();
+
+        if (itemList != null) {
+            for (Item item : itemList) {
+                itemSmallDtoList.add(toItemSmallDto(item));
+            }
+        }
+
+        return itemSmallDtoList;
     }
 }

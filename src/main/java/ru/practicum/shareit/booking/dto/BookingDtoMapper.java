@@ -14,12 +14,12 @@ public final class BookingDtoMapper {
     public static BookingDto toBookingDto(Booking booking) {
         if (booking != null) {
             return BookingDto.builder()
-                .id(booking.getId())
-                .item(ItemDtoMapper.toItemDto(booking.getItem()))
-                .booker(UserDtoMapper.toUserDto(booking.getBooker()))
-                .start(booking.getRentStartDate())
-                .end(booking.getRentEndDate())
-                .status(booking.getStatus()).build();
+                    .id(booking.getId())
+                    .item(ItemDtoMapper.toItemDto(booking.getItem()))
+                    .booker(UserDtoMapper.toUserDto(booking.getBooker()))
+                    .start(booking.getRentStartDate())
+                    .end(booking.getRentEndDate())
+                    .status(booking.getStatus()).build();
         } else return null;
     }
 

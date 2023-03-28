@@ -2,10 +2,8 @@ package ru.practicum.shareit.validators;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
-import ru.practicum.shareit.exceptions.InvalidPaginationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PaginationValidatorTest {
     @Test

@@ -34,8 +34,6 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByBooker_idAndRentEndDateBeforeOrderByRentStartDateDesc(long bookerId, LocalDateTime now, Pageable page);
 
-//    List<Booking> findByItem_idIn(List<Long> itemIdList);
-
     List<Booking> findByItem_idAndBooker_idAndStatusAndRentEndDateIsBefore(long itemId, long authorId, BookingStatus approved, LocalDateTime now);
 
     List<Booking> findByItem_idInAndStatus(List<Long> itemIdList, BookingStatus approved);

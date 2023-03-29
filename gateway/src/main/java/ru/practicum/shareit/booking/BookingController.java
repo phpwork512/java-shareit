@@ -26,11 +26,15 @@ public class BookingController {
 
     @GetMapping
     public ResponseEntity<Object> getBookings(@Positive @RequestHeader(value = Constants.X_HEADER_NAME) long userId,
-                                              @RequestParam(name = "state", defaultValue = "all") String stateParam,
+                                              @RequestParam(name = "state", defaultValue = "ALL") String stateParam,
                                               @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                               @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        BookingState state = BookingState.from(stateParam)
-                .orElseThrow(() -> new IllegalArgumentException("Unknown state: " + stateParam));
+        BookingState state;
+        try {
+            state = BookingState.valueOf(stateParam);
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalArgumentException("Unknown state: " + stateParam);
+        }
         log.info("Get booking with state {}, userId={}, from={}, size={}", stateParam, userId, from, size);
         return bookingClient.getBookings(userId, state, from, size);
     }

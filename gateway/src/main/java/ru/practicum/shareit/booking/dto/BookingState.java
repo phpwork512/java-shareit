@@ -15,13 +15,4 @@ public enum BookingState {
     REJECTED,
     // Ожидающие подтверждения
     WAITING;
-
-    public static Optional<BookingState> from(String stringState) {
-        for (BookingState state : values()) {
-            if (state.name().equalsIgnoreCase(stringState)) {
-                return Optional.of(state);
-            }
-        }
-        return Optional.empty();
-    }
 }
